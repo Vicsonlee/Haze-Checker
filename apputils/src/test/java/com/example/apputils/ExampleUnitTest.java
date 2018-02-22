@@ -1,4 +1,4 @@
-package com.test.hazechecker;
+package com.example.apputils;
 
 import org.junit.Test;
 

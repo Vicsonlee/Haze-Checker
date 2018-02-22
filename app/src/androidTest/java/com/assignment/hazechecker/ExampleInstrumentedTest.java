@@ -1,4 +1,4 @@
-package com.test.hazechecker;
+package com.assignment.hazechecker;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
