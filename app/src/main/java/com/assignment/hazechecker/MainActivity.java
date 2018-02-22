@@ -194,8 +194,10 @@ public class MainActivity extends AppCompatActivity
             loadingDialog.dismiss();
         }
 
-        TextView time = findViewById(R.id.result_time_text);
-        time.setText(getString(R.string.last_result, timestamp));
+        if (timestamp != null) {
+            TextView time = findViewById(R.id.result_time_text);
+            time.setText(getString(R.string.last_result, timestamp));
+        }
 
         Fragment loadedFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         Fragment newFragment;
