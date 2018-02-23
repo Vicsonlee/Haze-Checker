@@ -12,7 +12,9 @@ import com.assignment.hazechecker.R;
 import java.io.Serializable;
 import java.util.Map;
 
-
+/**
+ * Fragment for Home, displays national PSI/PM25 averages
+ */
 public class HomeFragment extends Fragment {
     private static final String ARG_PSI = "home_psi";
     private static final String ARG_PM25 = "home_pm25";

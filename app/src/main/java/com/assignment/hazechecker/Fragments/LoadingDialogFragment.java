@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 
 import com.assignment.hazechecker.R;
 
+/**
+ * DialogFragment handler for "query in progress" dialog, lets users cancel requests manually
+ */
 public class LoadingDialogFragment extends DialogFragment {
 
     public interface DialogListener {

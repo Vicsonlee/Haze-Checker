@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         drawerList.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, listItems));
 
+        // destroy old fragment and create new fragment with the reading data
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,15 +106,20 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        // initialize with blank HomeFragment
         HomeFragment homeFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, homeFragment)
                 .commit();
 
+        // load and update fragment
         controller.loadData();
         refresh();
     }
 
+    /**
+     * Helper function to set up the drawer
+     */
     private void setupDrawer(){
         drawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -170,12 +176,16 @@ public class MainActivity extends AppCompatActivity
         controller.cancelQuery();
     }
 
+    /**
+     * Listener function for Refresh button press.
+     * This checks for internet connectivity.
+     */
     public void returnButtonOnClick(View v){
+        // Check if there is an internet connection
         // honestly this should be in controller
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
@@ -188,17 +198,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Update timestamp info and reloads fragments with newest data
+     */
     public void refresh(){
+        // close loading dialogs if they are open
         Fragment dialog = getSupportFragmentManager().findFragmentByTag("loading");
         if (dialog != null) {
             loadingDialog.dismiss();
         }
 
+        // update timestamp
         if (timestamp != null) {
             TextView time = findViewById(R.id.result_time_text);
             time.setText(getString(R.string.last_result, timestamp));
         }
 
+        // destroy and recreate fragments with latest data
         Fragment loadedFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         Fragment newFragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -216,7 +232,11 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+    /**
+     * Displays the timeout dialog
+     */
     public void timeout(){
+        // close open loading dialogs
         Fragment dialog = getSupportFragmentManager().findFragmentByTag("loading");
         if (dialog != null) {
             loadingDialog.dismiss();

@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 
 import com.assignment.hazechecker.R;
 
+/**
+ * DialogFragment handler for "no internet" dialog
+ * (even though it's named TimeoutDialogFragment)
+ * lets users retry or cancel the query
+ */
 public class TimeoutDialogFragment extends DialogFragment {
 
     public interface DialogListener {

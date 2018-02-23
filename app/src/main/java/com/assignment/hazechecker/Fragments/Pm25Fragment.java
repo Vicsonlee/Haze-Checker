@@ -13,7 +13,9 @@ import com.assignment.hazechecker.R;
 import java.io.Serializable;
 import java.util.Map;
 
-
+/**
+ * Fragment for PM25, displays PM25 readings for all regions
+ */
 public class Pm25Fragment extends Fragment {
     private static final String ARG_PM25 = "pm25_frag";
 

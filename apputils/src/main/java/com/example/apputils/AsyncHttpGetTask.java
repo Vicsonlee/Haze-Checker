@@ -17,7 +17,11 @@ import java.util.Map;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
+/**
+ * Class for making Async HTTP GET requests, must be passed a ResponseListener when constructed
+ * start task using execute("<base_url>");
+ * will return null if request fails
+ */
 public class AsyncHttpGetTask extends AsyncTask<String, Void, String> {
 
     private String serverResponse;
@@ -44,12 +48,14 @@ public class AsyncHttpGetTask extends AsyncTask<String, Void, String> {
         HttpURLConnection urlConnection = null;
         try {
             if (queryParams != null) {
+                // add params
                 ArrayList<String> paramList = new ArrayList<String>();
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
                     paramList.add(entry.getKey());
                     paramList.add(entry.getValue());
                 }
                 url = applyParameters(params[0], paramList.toArray(new String[paramList.size()]));
+                // when execute("url") is called, the url is passed to param[0]
             }
             else {
                 url = new URL(params[0]);
@@ -97,6 +103,11 @@ public class AsyncHttpGetTask extends AsyncTask<String, Void, String> {
         listener.taskComplete(serverResponse);
     }
 
+    /**
+     * Helper function to get String from an InputStream
+     * @param in InputStream object, not null safe
+     * @return String from InputStream
+     */
     private String readStream(InputStream in) {
         BufferedReader reader = null;
         StringBuffer response = new StringBuffer();
@@ -120,6 +131,13 @@ public class AsyncHttpGetTask extends AsyncTask<String, Void, String> {
         return response.toString();
     }
 
+    /**
+     * Applies key-value parameter pairs to a url string and returns a URL object
+     * @param baseUrl  Base URL string, not null safe
+     * @param urlParameters Array of parameters in the form of [key1, value1, key2, value2, ...]
+     *                      Throws IndexOutOfBoundsException if number of elements is not even
+     * @return URL object
+     */
     private URL applyParameters(String baseUrl, String[] urlParameters){
         StringBuilder query = new StringBuilder();
         boolean first = true;

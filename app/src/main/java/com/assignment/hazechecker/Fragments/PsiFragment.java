@@ -13,7 +13,9 @@ import com.assignment.hazechecker.R;
 import java.io.Serializable;
 import java.util.Map;
 
-
+/**
+ * Fragment for PSI, displays PSI readings for all regions
+ */
 public class PsiFragment extends Fragment {
 
     private static final String ARG_PSI = "psi_frag";

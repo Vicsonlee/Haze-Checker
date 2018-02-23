@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Provides most of the logic operations for the app
+ */
 public class MainController implements ResponseListener {
 
     private MainActivity main;
@@ -31,11 +34,17 @@ public class MainController implements ResponseListener {
         this.main = main;
     }
 
+    /**
+     * Starts a query using AsyncHttpGetTask, return is passed to taskComplete()
+     */
     public void startQuery(){
         queryTask = new AsyncHttpGetTask(this);
         queryTask.execute("https://api.data.gov.sg/v1/environment/psi");
     }
 
+    /**
+     * Cancels the ongoing query if it exists
+     */
     public void cancelQuery(){
         if (queryTask != null) {
             queryTask.cancel(true);
@@ -43,11 +52,17 @@ public class MainController implements ResponseListener {
         }
     }
 
+    /**
+     * Callback function from the ResponseListener interface
+     * @param response  Response object returned by AsyncHttpGetTask, usually String
+     */
     public void taskComplete(Object response){
         Log.d("controller","Task completed");
         if (response != null) {
+            // success
             Map<String, String> psi = getIndex((String) response, "psi_twenty_four_hourly");
             Map<String, String> pm25 = getIndex((String) response, "pm25_twenty_four_hourly");
+            // set params directly in MainActivity
             main.setPsiValues(psi);
             main.setPm25Values(pm25);
 
@@ -64,10 +79,17 @@ public class MainController implements ResponseListener {
             main.refresh();
         }
         else{
+            // null response, query failed
             main.timeout();
         }
     }
 
+    /**
+     * Helper function to extract readings from the raw JSON string
+     * @param rawJSON  raw JSON string
+     * @param key  string to check for values
+     * @return corresponding value for given key, returns null if key doesn't exist or is null
+     */
     private Map<String,String> getIndex(String rawJSON, String key){
         Map<String,String> indexMap = new HashMap<String, String>();
         String indexName;
@@ -90,6 +112,11 @@ public class MainController implements ResponseListener {
         }
     }
 
+    /**
+     * Saves a Serializable to internal storage
+     * @param filename  filename to use
+     * @param data  Serializable to save
+     */
     public void saveData(String filename, Serializable data){
         try {
             FileOutputStream outputStream = main.openFileOutput(filename, Context.MODE_PRIVATE);
@@ -101,6 +128,9 @@ public class MainController implements ResponseListener {
         }
     }
 
+    /**
+     * Clears all files in internal storage, use with care
+     */
     public void clearData(){
         String[] files = main.fileList();
         if (files.length < 1) {
@@ -116,6 +146,9 @@ public class MainController implements ResponseListener {
         }
     }
 
+    /**
+     * load one file from internal storage to MainActivity
+     */
     public void loadData(){
         try {
             String[] files = main.fileList();
